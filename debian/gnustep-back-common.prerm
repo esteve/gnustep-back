@@ -1,0 +1,26 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    remove)
+	if [ -d /var/lib/defoma/gnustep-nfont.d ]; then
+	  if [ -x "`which defoma-app 2>/dev/null`" ]; then
+	    defoma-app purge gnustep-nfont || true
+	  fi
+	  rm -rf /var/lib/defoma/gnustep-nfont.d
+	fi
+	rm -rf /var/lib/GNUstep/Fonts/*
+	;;
+    upgrade|deconfigure)
+        ;;
+    failed-upgrade)
+        ;;
+    *)
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0

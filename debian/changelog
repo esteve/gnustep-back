@@ -1,0 +1,628 @@
+gnustep-back (0.20.1-2ubuntu1) precise; urgency=low
+
+  * debian/patches/format-security.patch: fix -Werror=format-security -related
+    build failure by properly passing a format string to syslog().
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Thu, 17 Nov 2011 17:42:30 -0500
+
+gnustep-back (0.20.1-2) unstable; urgency=low
+
+  * Upload to unstable.
+
+ -- Yavor Doganov <yavor@gnu.org>  Fri, 16 Sep 2011 10:55:29 +0300
+
+gnustep-back (0.20.1-1) experimental; urgency=low
+
+  * New upstream release.
+  * debian/control.m4 (Vcs-Arch): Replace with...
+    (Vcs-Git): ...as the package is maintained in Git now.
+    (Vcs-Browser): New field.
+    (Description): Avoid definite article to placate lintian.
+    (Standards-Version): Bump to 3.9.2; no changes needed.
+    (gnustep-back-dbg) <Recommends>: Set to libgnustep-gui0.20-dbg.
+  * debian/control: Regenerate.
+  * debian/rules (v_gui): Bump to 0.20.
+    (CC, dummy, foo): Remove; not needed.
+    (debian/configure-art-stamp, debian/configure-cairo-stamp): Create a
+    symlink for `configure'.
+  * debian/patches/debian-fonts.patch:
+  * debian/patches/cairo-fc.patch: Refresh.
+  * debian/patches/autoreconf.patch: Regenerate.
+
+ -- Yavor Doganov <yavor@gnu.org>  Sat, 04 Jun 2011 12:19:20 +0300
+
+gnustep-back (0.18.0-3) unstable; urgency=medium
+
+  * debian/control.m4 (gnustep-back-common) <Depends>: Add ttf-freefont
+    (Closes: #596059).
+  * debian/control: Regenerate.
+
+ -- Yavor Doganov <yavor@gnu.org>  Wed, 08 Sep 2010 18:35:17 +0300
+
+gnustep-back (0.18.0-2) unstable; urgency=low
+
+  * Upload to unstable.
+  * debian/control.m4 (gnustep-back-dbg) <Recommends>: Add
+    libgnustep-gui0.18-dbg.
+    (Conflicts): Replace with...
+    (Breaks): ...as recommended by current Policy.
+    (Standards-Version): Set to 3.9.1.
+  * debian/control: Regenerate.
+  * debian/watch: Track only stable releases.
+
+ -- Yavor Doganov <yavor@gnu.org>  Wed, 11 Aug 2010 18:47:23 +0300
+
+gnustep-back (0.18.0-1) experimental; urgency=low
+
+  * New upstream release.
+  * debian/control.m4 (Standards-Version): Set to 3.8.4 (no changes).
+    (Depends): Remove ${shlibs:Depends}.  Add ${misc:Depends} for -dbg.
+    (Description): Tweak to avoid lintian warning.
+    (gnustep-back-doc): Remove and merge into -common.
+    (gnustep-back-common) <Replaces, Conflicts, Provides>: Define to -doc.
+  * debian/rules (v_gui): Bump to 0.18.0.
+    (OPTFLAG): Replace with $(optim) for compatibility with
+    gnustep-make/2.4.0.
+    (p_doc, d_doc): Remove.
+    (install-indep): Adjust rule to install the documentation into
+    gnustep-back-common.
+  * debian/gnustep-back-common.preinst: New; remove defoma stuff and new
+    Fonts dir on upgrades.
+  * debian/source/format: New file.
+  * debian/copyright: Bump copyright years.  Add missing copyright notice
+    for the fonts (Closes: #561809).
+
+ -- Yavor Doganov <yavor@gnu.org>  Tue, 22 Jun 2010 18:46:58 +0300
+
+gnustep-back (0.17.1-1) experimental; urgency=low
+
+  [ Gürkan Sengün ]
+  * New upstream version.
+  * Bump standards version.
+
+  [ Yavor Doganov ]
+  * DejaVu is provided as a fallback font in [CairoFontEnumerator
+    -default*FontName] methods (Closes: #527593).
+  * debian/control.m4: Wrap all fields.
+    (Section): Change to `gnustep'.
+    (Uploaders): Add myself, remove Hubert upon his request.
+    (Conflicts, Replaces): Remove; ancient.
+    (Homepage, Vcs-Arch): New fields.
+    (Build-Depends): Add quilt.
+    (gnustep-back-common) <Depends>: Remove defoma, add fontconfig and
+    mknfonts.tool (Closes: #542334).
+  * debian/control: Regenerate.
+  * debian/rules: Use $(MAKE) instead of gs_make to properly pass
+    variables and options to sub-makes.  Use quilt for patch management;
+    adjust rules accordingly.
+    (LDFLAGS, OPTFLAG): Define.
+    (install-art): Remove empty dirs.
+    (binary-indep): Don't install the defoma script.
+  * debian/gnustep-back-common.prerm:
+  * debian/gnustep-back-common.postinst: Adjust for the defoma removal;
+    generate nfont descriptions with the help of fc-list and mknfonts.
+  * debian/README.source: New file.
+  * debian/gnustep-nfont.defoma: Delete.
+  * debian/watch: Make it work; don't uupdate.
+  * debian/README.Debian: Add info about switching backends; remove
+    obsolete notes about Bitstream-Vera.
+  * debian/patches/debian-fonts.patch: New; split from the diff.gz and
+    update for the new fonts location.
+  * debian/patches/cairo-fc.patch: New; fix FTBFS with cairo from
+    experimental.  Thanks to Barry deFreese for reporting this.
+  * debian/patches/autoreconf.patch: New; regenerate configure.
+  * debian/patches/series: Add.
+
+ -- Yavor Doganov <yavor@gnu.org>  Fri, 04 Dec 2009 12:26:34 +0200
+
+gnustep-back (0.16.0-3) unstable; urgency=low
+
+  * Really upload to unstable.
+
+ -- Hubert Chathi <uhoreg@debian.org>  Sun, 12 Apr 2009 15:54:30 -0400
+
+gnustep-back (0.16.0-2) experimental; urgency=low
+
+  * Upload to unstable.
+
+ -- Hubert Chathi <uhoreg@debian.org>  Sat, 11 Apr 2009 13:54:01 -0400
+
+gnustep-back (0.16.0-1) experimental; urgency=low
+
+  [Gürkan Sengün]
+  * New upstream version.
+  * Bump standards version.
+  * Bump debhelper version.
+  * Add myself to Uploaders field.
+  * Replace xlibmesa-gl-dev with libgl1-mesa-dev in debian/control.
+
+  [Hubert Chathi]
+  * Bump version numbers.
+  * Force to install in system domain.
+  * Remove config.status in clean target.
+  * Target to experimental distribution.
+
+ -- Gürkan Sengün <gurkan@phys.ethz.ch>  Fri, 20 Feb 2009 22:13:47 +0100
+
+gnustep-back (0.14.0-2) unstable; urgency=low
+
+  * Upload to unstable.
+
+ -- Hubert Chathi <uhoreg@debian.org>  Wed, 02 Jul 2008 17:19:03 -0400
+
+gnustep-back (0.14.0-1) experimental; urgency=low
+
+  * New upstream release.
+  * debian/rules: Fix building of backends to be more maintainable.
+  * debian/control: Add depends on ${gnustep:Depends}.
+
+ -- Hubert Chathi <uhoreg@debian.org>  Mon, 16 Jun 2008 10:18:50 -0400
+
+gnustep-back (0.12.0-2) unstable; urgency=low
+
+  * Source/x11/XGServer: Apply patch from upstream to work with multiple
+    displays. (Closes: #467199)
+  * debian/control, debian/rules: Add debug package.
+  * debian/control, debian/compat: Use debhelper compatibility level 5.
+  * debian/control: Bump standards version to 3.7.3 (no other changes needed).
+  * debian/rules: Remove call to strip (dh_strip should be enough).
+  * debian/control: Remove Suggests:/Depends: on ttf-bitstream-vera.
+    (Closes: #461263)
+  * debian/Fonts/*: Removed.
+  * debian/NEWS.Debian: Updated information on font names.
+  * debian/copyright: Add copyright info, update note about
+    common-licenses to point to specific the version of the license as
+    well as the latest version.
+
+ -- Hubert Chathi <uhoreg@debian.org>  Tue, 26 Feb 2008 23:01:55 -0500
+
+gnustep-back (0.12.0-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Hubert Chan <uhoreg@debian.org>  Fri,  6 Jul 2007 13:41:52 -0400
+
+gnustep-back (0.11.0-3) unstable; urgency=low
+
+  * Update maintainer address.
+  * Call defoma-app from gnustep-back-common postinst/prerm. (Closes: #393476)
+
+ -- Hubert Chan <uhoreg@debian.org>  Wed, 18 Oct 2006 18:22:08 -0400
+
+gnustep-back (0.11.0-2) unstable; urgency=low
+
+  * Updated README.Debian, and added NEWS.Debian to document font name
+    changes to match the defoma names.
+
+ -- Hubert Chan <hubert@uhoreg.ca>  Mon, 25 Sep 2006 21:16:57 -0400
+
+gnustep-back (0.11.0-1) unstable; urgency=low
+
+  * New upstream release.
+  * Get fonts from defoma (thanks to gus for the defoma script).
+    - make the art backend search in /var/lib/defoma/gnustep-nfont.d.
+  * Use shlibs.local file for libgnustep-gui to avoid circular depends.
+  * Add license headers to copyright file.
+  * Change section of -doc to doc, to agree with override file.
+  * Suggest some useful font packages. (Closes: #361685)
+  * Bump standards version to 3.7.2.  (no changes)
+
+ -- Hubert Chan <hubert@uhoreg.ca>  Wed, 30 Aug 2006 16:39:25 -0600
+
+gnustep-back (0.10.2-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Hubert Chan <hubert@uhoreg.ca>  Tue, 27 Dec 2005 13:09:16 -0700
+
+gnustep-back (0.10.1-2) unstable; urgency=low
+
+  * Split into -back, -doc, -gpbs, and -common to help with future parallel
+    installs of different versions.
+  * Add soname to package name.
+  * Remove unneeded lintian/linda overrides.
+
+ -- Hubert Chan <hubert@uhoreg.ca>  Fri, 16 Dec 2005 23:26:20 -0500
+
+gnustep-back (0.10.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Acknowledge NMU. (Closes: #314823, #314385, #320958, #321646, #329223,
+    #337143, #340878)
+  * Build with new gnustep-make.
+  * Bump standards-version to 3.6.2.
+  * Document how to turn off antialiasing in README.Debian.
+  * Remove obsolete libdps-dev build-dependency.
+
+ -- Hubert Chan <hubert@uhoreg.ca>  Mon, 12 Dec 2005 20:41:22 -0500
+
+gnustep-back (0.9.5-1.1) unstable; urgency=low
+
+  * NMU
+  * Rebuilt against libfreetype6 (>= 2.1.10) (Closes: #314823, #314385,
+    #320958, #321646, #329223, #337143, #340878)
+
+ -- Wolfgang Sourdeau <was@debian.org>  Tue, 29 Nov 2005 16:50:32 -0500
+
+gnustep-back (0.9.5-1) unstable; urgency=low
+
+  * New upstream release.
+  * Adam Fedor inserted a email address to forward reports to (closes: #291356).
+  * Now Build-Depends on pkg-config.
+  * Overrides inappropriate linda warnings.
+
+ -- Eric Heintzmann <eric@gnustep.fr.st>  Sat,  9 Apr 2005 22:58:10 +0200
+
+gnustep-back (0.9.4-2) unstable; urgency=low
+
+  * Rebuild using latest GNUstep libs (closes: #281007).
+
+ -- Eric Heintzmann <eric@gnustep.fr.st>  Thu, 18 Nov 2004 20:18:30 +0100
+
+gnustep-back (0.9.4-1) unstable; urgency=low
+
+  * New upstream release.
+  * Bump Standards-Version to 3.6.1.1.
+
+ -- Eric Heintzmann <eric@gnustep.fr.st>  Thu, 28 Oct 2004 21:16:31 +0200
+
+gnustep-back (0.9.3-2) unstable; urgency=low
+
+  * Recompile.
+
+ -- Matthias Klose <doko@debian.org>  Sun, 18 Jul 2004 08:36:14 +0200
+
+gnustep-back (0.9.3-1) unstable; urgency=low
+
+  * New upstream release.
+  * Remove libwraster2-dev from build-dependencies.
+  * Change Debian GNUstep maintainers e-mail:
+     use pkg-gnustep-maintainers@lists.alioth.debian.org.
+  * Provides wrapper scripts for gpbs.
+
+ -- Eric Heintzmann <eric@gnustep.fr.st>  Mon, 28 Jun 2004 19:51:43 +0200
+
+gnustep-back (0.9.2-2) unstable; urgency=medium
+
+  * Update build dependency on gnustep-gui.
+
+ -- Matthias Klose <doko@debian.org>  Mon, 12 Apr 2004 22:17:16 +0200
+
+gnustep-back (0.9.2-1) unstable; urgency=low
+
+  * New upstream release (closes: #239880).
+  * debian/control.m4: Update Build-Depends field.
+  * debian/rules: Update CC.
+
+ -- Eric Heintzmann <eric@gnustep.fr.st>  Wed,  7 Apr 2004 13:38:22 +0200
+
+gnustep-back (0.9.1-2) unstable; urgency=low
+
+  * Change Vera nfont dirnames.
+
+ -- Eric Heintzmann <eric@gnustep.fr.st>  Wed, 24 Dec 2003 03:24:45 +0100
+
+gnustep-back (0.9.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Update Build-Depends field (libxft2-dev --> libxft-dev).
+  * Switch to art backend (closes: #155229, #223365, #204774, #204645):
+   + Add nfonts in Fonts dir.
+   + Modify debian/rules install target to install fonts.
+   + Binary package now depends on ttf-bitstream-vera and ttf-freefont.
+   + New debian/README.Debian file.
+
+ -- Eric Heintzmann <eric@gnustep.fr.st>  Sat, 20 Dec 2003 18:29:06 +0100
+
+gnustep-back (0.9.0-1) unstable; urgency=low
+
+  * New upstream release.
+  * Install gpbs manpage.
+
+ -- Eric Heintzmann <eric@gnustep.fr.st>  Fri,  3 Oct 2003 09:38:47 +0200
+
+gnustep-back (0.8.9-1) unstable; urgency=low
+
+  * New upstream release.
+  * New Co-Maintainer.
+  * Update to standard version 3.6.1.
+  
+ -- Eric Heintzmann <eric@gnustep.fr.st>  Sat, 30 Aug 2003 00:08:34 +0200
+
+gnustep-back (0.8.8-1) unstable; urgency=low
+
+  * New upstream release.
+  * Remove debian/gnustep-back.docs file.
+  * Update debian/rules to use flattened directory structure :
+    - remove GS_HOST, GS_CPU, GS_OS, GS_LIB_DIR, GS_COMBO_DIR variables.
+
+ -- Eric Heintzmann <eric@gnustep.fr.st>  Mon, 28 Jul 2003 06:02:56 +0200
+
+gnustep-back (0.8.7-2) unstable; urgency=low
+
+  * Minor build process modifications.
+
+ -- Matthias Klose <doko@debian.org>  Sun, 27 Jul 2003 23:16:18 +0200
+
+gnustep-back (0.8.7-1) unstable; urgency=low
+
+  * New upstream release.
+  * Update to standard version 3.5.10.
+  * Update to debhelper compatibility level 4.
+  * Use gcc/gobjc 3.3.
+  * Update Build-Depends field.
+  * Fix lintian warnings and errors.
+  * Update copyright file.
+  * Update descriptions.
+  * Do not use dh_doclink any longer.
+  * Add debian/watch file.
+
+ -- Eric Heintzmann <eric@gnustep.fr.st>  Wed,  9 Jul 2003 23:11:40 +0200
+
+gnustep-back (0.8.5-1) unstable; urgency=medium
+
+  * New upstream release.
+  * GNUstep was never optimized for i686 (closes: #183178).
+  * Update copyright file (Eric Heintzmann). Closes: #186144.
+
+ -- Matthias Klose <doko@debian.org>  Tue, 25 Mar 2003 22:35:52 +0100
+
+gnustep-back (0.8.4-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Matthias Klose <doko@debian.org>  Sat,  1 Mar 2003 14:27:36 +0100
+
+gnustep-back (0.8.3-2) unstable; urgency=low
+
+  * Adjust build dependencies for xlib backend.
+
+ -- Matthias Klose <doko@debian.org>  Sun, 26 Jan 2003 12:15:39 +0100
+
+gnustep-back (0.8.3-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Matthias Klose <doko@debian.org>  Mon, 20 Jan 2003 23:57:33 +0100
+
+gnustep-back (0.8.1-1) unstable; urgency=low
+
+  * New upstream version.
+
+ -- Matthias Klose <doko@debian.org>  Wed, 11 Sep 2002 22:04:20 +0200
+
+gnustep-back (0.8.0-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Matthias Klose <doko@debian.org>  Sat,  3 Aug 2002 16:40:05 +0200
+
+gnustep-back (0.7.9-1) unstable; urgency=low
+
+  * New upstream version.
+
+ -- Matthias Klose <doko@debian.org>  Sun, 21 Jul 2002 17:43:52 +0200
+
+gnustep-back (0.7.8-1) unstable; urgency=low
+
+  * New upstream version.
+  * Conflict/Replace with gnustep-xgps (closes: #148777).
+
+ -- Matthias Klose <doko@debian.org>  Tue, 16 Jul 2002 23:07:58 +0200
+
+gnustep-back (0.7.7-2) unstable; urgency=low
+
+  * Recompile with tightened gnustep-gui dependency.
+  * Remove explicit gcc dependency.
+
+ -- Matthias Klose <doko@debian.org>  Sat,  1 Jun 2002 11:03:48 +0200
+
+gnustep-back (0.7.7-1) unstable; urgency=low
+
+  * New package, obsoleting the gnustep-xgps package.
+
+ -- Matthias Klose <doko@debian.org>  Sun, 12 May 2002 11:48:28 +0200
+
+gnustep-xgps (0.7.6-1) unstable; urgency=medium
+
+  * debian/control.m4: Build-Depend on gnustep-gui's version.
+
+ -- Matthias Klose <doko@debian.org>  Fri,  5 Apr 2002 17:39:38 +0200
+
+gnustep-xgps (0.7.6-0.2) unstable; urgency=medium
+
+  * Non Maintainer Upload
+  * Rebuilt to get build dependencies right (closes #140180)
+
+ -- Paul Seelig <pseelig@debian.org>  Thu, 28 Mar 2002 00:40:15 +0100
+
+gnustep-xgps (0.7.6-0.1) unstable; urgency=medium
+
+  * Non Maintainer Upload
+  * New upstream release
+
+ -- Paul Seelig <pseelig@debian.org>  Mon, 25 Mar 2002 02:26:47 +0100
+
+gnustep-xgps (0.7.5-2) unstable; urgency=low
+
+  * Rebuild to get the libobjc1 depedency right.
+
+ -- Matthias Klose <doko@debian.org>  Thu,  7 Mar 2002 00:56:49 +0100
+
+gnustep-xgps (0.7.5-1) unstable; urgency=medium
+
+  * Final release.
+  * Configure with --enable-xim.
+
+ -- Matthias Klose <doko@debian.org>  Sun,  3 Feb 2002 20:04:00 +0100
+
+gnustep-xgps (0.7.0.90-2) unstable; urgency=low
+
+  * Add libwraster2-dev to build dependencies.
+
+ -- Matthias Klose <doko@debian.org>  Thu, 17 Jan 2002 21:07:05 +0100
+
+gnustep-xgps (0.7.0.90-1) unstable; urgency=low
+
+  * New upstream snapshot (daily snapshot 20020110).
+  * Correctly determine s390 architecture.
+  * Fix build dependencies (closes: #126014).
+
+ -- Matthias Klose <doko@debian.org>  Sun, 13 Jan 2002 21:54:45 +0100
+
+gnustep-xgps (0.7.0-0.1) unstable; urgency=low
+
+  * New upstream release.
+  * Use Standards-Version: 3.5.5.
+
+ -- Chanop Silpa-Anan <chanop@debian.org>  Thu, 26 Jul 2001 09:51:25 +1000
+
+gstep-core (0.6.5-3) frozen unstable; urgency=low
+
+  * base/Source/NSInvocation.m: Fix important build error on alpha #59373.
+  * Set GNUSTEP_SYSTEM_ROOT to /usr/lib/GNUstep and disable separate
+    system root. Needed to correctly build gstep-extensions and gstep-guile.
+  * debian/gstep-base.init.in: Fix typo (fixes #59423).
+  * debian/gstep-base.postrm: Remove directory in ld.so.conf inserted
+    in postinst (fixes #59424).
+
+ -- Matthias Klose <doko@cs.tu-berlin.de>  Wed,  1 Mar 2000 21:33:53 +0100
+
+gstep-core (0.6.5-2) frozen unstable; urgency=medium
+
+  * Updated to the current state of the CVS. Integrates the Debian
+    patches submitted upstream.
+  * debian/gstep-base.init.d: Use new gdomap option -p for not probing
+    machines on the local network (really fixes grave #55906).
+  * debian/README.Debian: Document gdomap configuration.
+  * debian/control.in: Add autoconf to Build-Depends (fixes i#58873).
+
+ -- Matthias Klose <doko@cs.tu-berlin.de>  Sun, 27 Feb 2000 22:31:00 +0100
+
+gstep-core (0.6.5-1) frozen unstable; urgency=medium
+
+  * Final release.
+  * Don't probe machines on the local network (grave #55906).
+  * Stop gdomap daemon (#48796).
+  * /etc/GNUstep: directory for GNUstep configuration files.
+  * debian/control.in: Add build depends.
+
+ -- Matthias Klose <doko@cs.tu-berlin.de>  Sat, 19 Feb 2000 10:09:19 +0100
+
+gstep-core (0.6.0.90-1) unstable; urgency=low
+
+  * New snapshot from CVS (1999-10-28).
+
+ -- Matthias Klose <doko@cs.tu-berlin.de>  Thu, 28 Oct 1999 21:04:46 +0200
+
+gstep-core (0.6.0-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/gstep-base.init: Change init script message (fixes #40339).
+  * debian/gstep-xgps.{preinst,postrm}: Divert gpbs (fixes #40976).
+  * debian/gstep-base.init.in: Don't source GNUstep.sh (fixes #40338).
+  * debian/control.in: Use versioned package names for libraries.
+
+ -- Matthias Klose <doko@cs.tu-berlin.de>  Sat, 21 Aug 1999 20:41:37 +0200
+
+gstep-core (0.5.5.990625-1) unstable; urgency=low
+
+  * New snapshot.
+
+ -- Matthias Klose <doko@cs.tu-berlin.de>  Fri, 25 Jun 1999 22:24:56 +0200
+
+gstep-core (0.5.5.990508-1) unstable; urgency=low
+
+  * New snapshot. Built with xgps as backend.
+
+ -- Matthias Klose <doko@cs.tu-berlin.de>  Sun,  9 May 1999 15:18:28 +0200
+
+gstep-core (0.5.5.990310-1) unstable; urgency=low
+
+  * GNUstep 0.5.5 + minor updates from the CVS archive.
+
+ -- Matthias Klose <doko@cs.tu-berlin.de>  Thu, 11 Mar 1999 22:47:17 +0100
+
+gstep-core (0.5.5-1) unstable; urgency=low
+
+  * gstep-0.6 prerelease2 ("dawn").
+  * gstep-extensions, gstep-db and gstep-guile are moved out of the core package.
+  * Moved to debhelper-1.2.x.
+  * First try for powerpc and alpha architectures.
+  * New package gstep-base-dbg (link with -lgnustep-base_d).
+
+ -- Matthias Klose <doko@cs.tu-berlin.de>  Wed, 24 Feb 1999 18:35:13 +0100
+
+gstep-core (0.5.0.981229-1) frozen unstable; urgency=low
+
+  * Fixed linking of guile dependent binaries (introduced with guile 1.3-11).
+  * Fixed x permissions of debian installation scripts.
+
+ -- Matthias Klose <doko@cs.tu-berlin.de>  Tue, 29 Dec 1998 20:12:17 +0100
+
+gstep-core (0.5.0.981222-1) frozen unstable; urgency=low
+
+  * Moved symlink patches upstream.
+  * Built with debhelper 1.1.24 and provide the needed debhelper-1.2.18 files.
+
+ -- Matthias Klose <doko@cs.tu-berlin.de>  Mon, 22 Dec 1998 21:41:54 +0200
+
+gstep-core (0.5.0.981218-1) frozen unstable; urgency=low
+
+  * New maintainer.
+  * Previous builds included GNUSTEP_SYSTEM_ROOT, if GNUstep packages
+    were installed.
+  * Fixed build error on the alpha architecture (forwarding still doesn't
+    work).
+  * Install compiled guile modules in /usr/lib/guile1.3; don't know, if
+    this is correct, but better than /usr/share/guile.
+
+ -- Matthias Klose <doko@cs.tu-berlin.de>  Sat, 19 Dec 1998 01:53:27 +0200
+
+gstep-core (0.5.0.981215-0.1) frozen unstable; urgency=low
+
+  * Finally recompiled with correct libc.
+  * Finished db and guile packages (db already was in 0.5.0.980820-0.1).
+
+ -- Matthias Klose <doko@cs.tu-berlin.de>  Mon, 14 Dec 1998 16:15:27 +0200
+
+gstep-core (0.5.0.981207-0.1) frozen unstable; urgency=low
+
+  * Recompiled with correct libc.
+  * Removed dependencies on dpsclient.
+  * Fixed dependencies of gstep-*-dev packages.
+  * debian/rules: Removed explicit ix86 dependencies (again!).
+  * Added debian/patches directory for Debian specific patches.
+
+ -- Matthias Klose <doko@cs.tu-berlin.de>  Mon,  7 Dec 1998 14:38:47 +0200
+
+gstep-core (0.5.0.981106cvs-1) frozen unstable; urgency=low
+
+  * New upstream CVS snapshot.o
+    With the new anon CVS server, we can now track the GNUstep
+    development much faster.
+  * Don't build gstep-xdps until there's a free DPS system in Debian.
+  * Instead, we have the X/RAW backend. With X/RAW, gstep doesn't any
+    longer depend on non-free components and can go into main.
+  * gstep-gui now has a working NSText class.
+  * debian/rules: Rewritten again.
+
+ -- Gregor Hoffleit <flight@debian.org>  Sat,  7 Nov 1998 12:08:45 +0100
+
+gstep-core (0.5.0.980820-0.1) unstable; urgency=low
+
+  * New upstream snapshot.
+  * Built with X/RAW as backend; still depends on dgs.
+  * New postinst/postrm scripts.
+  * debian/rules: Rewritten.
+  * debian/control.in: Tightened dependencies.
+  * Keep NEXTSTEP files.
+
+ -- Matthias Klose <doko@cs.tu-berlin.de>  Tue, 25 Aug 1998 13:48:48 +0200
+
+gstep-core (0.5.0.980806-1) unstable; urgency=low
+
+  * New upstream snapshot.
+  * GNUstep is now built from a single source package, gstep-core.
+
+ -- Gregor Hoffleit <flight@debian.org>  Fri,  7 Aug 1998 13:33:43 +0200

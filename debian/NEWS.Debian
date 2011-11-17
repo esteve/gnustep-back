@@ -1,0 +1,31 @@
+gnustep-back (0.12.0-2) unstable; urgency=low
+
+  * The old font names have been removed.  See the note below for how to
+    get your fonts working again, if you are using the old names.
+
+ -- Hubert Chathi <uhoreg@debian.org>  Mon, 25 Feb 2008 23:26:54 -0500
+
+gnustep-back (0.11.0-2) unstable; urgency=low
+
+  * The old font names are deprecated and will be removed after etch is
+    released.  If you have previously set GNUstep to use the Vera fonts,
+    please type:
+     . /usr/lib/GNUstep/System/Library/Makefiles/GNUstep.sh
+     defaults write NSGlobalDomain NSFont Bitstream-Vera-Sans
+     defaults write NSGlobalDomain NSBoldFont Bitstream-Vera-Sans-Bold
+     defaults write NSGlobalDomain NSUserFixedPitchFont Bitstream-Vera-Sans-Mono
+    to use the new font names.  If you have previously set GNUstep to use the
+    FreeFonts fonts, please type:
+     . /usr/lib/GNUstep/System/Library/Makefiles/GNUstep.sh
+     defaults write NSGlobalDomain NSFont FreeSans-Medium
+     defaults write NSGlobalDomain NSBoldFont FreeSans-Bold
+     defaults write NSGlobalDomain NSUserFixedPitchFont FreeMono-Medium
+    to use the new font names.
+
+    This will have to be done for each user who has previously set the
+    default GNUstep fonts.
+
+    Please see README.Debian for more information on setting the default fonts.
+
+ -- Hubert Chan <hubert@uhoreg.ca>  Mon, 25 Sep 2006 21:14:24 -0400
+

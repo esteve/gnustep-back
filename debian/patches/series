@@ -1,0 +1,4 @@
+cairo-fc.patch
+autoreconf.patch
+debian-fonts.patch
+format-security.patch

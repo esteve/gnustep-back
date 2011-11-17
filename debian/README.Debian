@@ -1,0 +1,53 @@
+gnustep-back for Debian
+------------------------
+
+GNUstep back performs antialiasing for text by default.  If you want to turn
+off antialiasing, type:
+
+ defaults write NSGlobalDomain GSFontAntiAlias NO
+
+The DejaVu fonts offer good on-screen display, and support many
+non-Latin characters as well.  They are probably the best choice for
+the default font.
+
+To set these as the default fonts for a user, type :
+
+ defaults write NSGlobalDomain NSFont DejaVuSans
+ defaults write NSGlobalDomain NSBoldFont DejaVuSans-Bold
+ defaults write NSGlobalDomain NSUserFixedPitchFont DejaVuSans-Mono
+
+NOTE: Font names for the default art backend do not match the cairo
+backend; usually, an extra space is added for cairo, e.g. "DejaVu
+Sans" vs "DejaVuSans".
+
+The GNUstep backends are managed via the alternatives system, but
+can always be set per user with
+
+ defaults write NSGlobalDomain GSBackend libgnustep-<backend>
+
+where <backend> is either art or cairo.
+
+The FreeFonts are not as well-suited as the DejaVu fonts to on-screen
+use, but they contain a lot more characters. If you deal with
+non-latin-1 text, it is recommended that you use these as your default
+fonts.  Normally, you don't need to do anything to use these as your
+default fonts, but if you have other versions of Helvetica or Courier
+installed, or if you have changed the defaults previously, to set the
+FreeFonts as the default fonts for the current user, type
+
+ defaults write NSGlobalDomain NSFont FreeSans-Medium
+ defaults write NSGlobalDomain NSBoldFont FreeSans-Bold
+ defaults write NSGlobalDomain NSUserFixedPitchFont FreeMono-Medium
+
+To reset the default fonts for a user, type :
+
+ defaults delete NSGlobalDomain NSFont
+ defaults delete NSGlobalDomain NSBoldFont
+ defaults delete NSGlobalDomain NSUserFixedPitchFont
+
+
+  -- Eric Heintzmann <eric@gnustep.fr.st>, Mon, 13 Oct 2003 18:43:08 +0200
+(updated by
+  -- Hubert Chan <hubert@uhoreg.ca>, Mon, Sep 25, 2006 21:10 -0400
+ -- Yavor Doganov <yavor@gnu.org>, Thu,  3 Dec 2009 18:00:06 +0200
+)

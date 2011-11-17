@@ -1,0 +1,130 @@
+Source: gnustep-back
+Section: gnustep
+Priority: optional
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+XSBC-Original-Maintainer: Debian GNUstep maintainers <pkg-gnustep-maintainers@lists.alioth.debian.org>
+Uploaders: Gürkan Sengün <gurkan@phys.ethz.ch>,
+	   Yavor Doganov <yavor@gnu.org>
+Standards-Version: 3.9.2
+Build-Depends: debhelper (>= 7),
+	       m4,
+	       libgnustep-gui-dev (>= V_GUI),
+	       libice-dev,
+	       libxext-dev,
+	       libxmu-dev,
+	       libfreetype6-dev,
+	       libxft-dev,
+	       libfontconfig1-dev,
+	       libgl1-mesa-dev,
+	       libart-2.0-dev,
+	       pkg-config,
+	       libcairo2-dev,
+	       texinfo,
+	       quilt
+Homepage: http://gnustep.org
+Vcs-Git: git://git.debian.org/pkg-gnustep/gnustep-back.git
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-gnustep/gnustep-back.git
+
+Package: gnustep-back`'SOV_BACK
+Section: libs
+Architecture: all
+Depends: gnustep-back`'SOV_BACK-art | gnustep-back`'SOV_BACK-alt,
+	 ${misc:Depends},
+	 ${gnustep:Depends}
+Suggests: ttf-dejavu | ttf-freefont | gsfonts-x11
+Description: GNUstep GUI Backend
+ It is a backend component for the GNUstep GUI Library.
+ The implementation of the GNUstep GUI Library is designed in two parts.
+ The first part is the front-end component which is independent of platform
+ and display system.  This front-end is combined with a back-end
+ component which handles all of the display system dependent such as
+ specific calls to the X Window System.
+ .
+ This is an empty package that depends on the various backends.
+
+Package: gnustep-back`'SOV_BACK-art
+Section: libs
+Architecture: any
+Depends: gnustep-back-common (>= V_GUI),
+	 ${shlibs:Depends},
+	 ${misc:Depends},
+	 ${gnustep:Depends}
+Suggests: ttf-dejavu | ttf-freefont | gsfonts-x11
+Provides: gnustep-back`'SOV_BACK-alt
+Description: GNUstep GUI Backend (art)
+ It is a backend component for the GNUstep GUI Library.
+ The implementation of the GNUstep GUI Library is designed in two parts.
+ The first part is the front-end component which is independent of platform
+ and display system.  This front-end is combined with a back-end
+ component which handles all of the display system dependent such as
+ specific calls to the X Window System.
+ .
+ This package provides the art backend.
+
+Package: gnustep-back`'SOV_BACK-cairo
+Section: libs
+Architecture: any
+Depends: gnustep-back-common (>= V_GUI),
+	 ${shlibs:Depends},
+	 ${misc:Depends},
+	 ${gnustep:Depends}
+Suggests: ttf-dejavu | ttf-freefont | gsfonts-x11
+Provides: gnustep-back`'SOV_BACK-alt
+Description: GNUstep GUI Backend (cairo)
+ It is a backend component for the GNUstep GUI Library.
+ The implementation of the GNUstep GUI Library is designed in two parts.
+ The first part is the front-end component which is independent of platform
+ and display system.  This front-end is combined with a back-end
+ component which handles all of the display system dependent such as
+ specific calls to the X Window System.
+ .
+ This package provides the cairo backend.
+
+Package: gnustep-gpbs
+Architecture: any
+Depends: ${shlibs:Depends},
+	 ${misc:Depends},
+	 ${gnustep:Depends}
+Description: GNUstep PasteBoard server
+ The gpbs daemon serves as a clipboard/pasteboard for GNUstep programs,
+ handling the copying, cutting and pasting of objects as  well  as  drag and
+ drop operations between applications.
+
+Package: gnustep-back-common
+Architecture: all
+Depends: fontconfig,
+	 mknfonts.tool (>= 0.5-10),
+	 ttf-freefont,
+	 ${misc:Depends},
+	 ${gnustep:Depends}
+Replaces: gnustep-back-doc
+Breaks: gnustep-back-doc (<< 0.18.0-2)
+Provides: gnustep-back-doc
+Description: GNUstep GUI Backend - common files
+ It is a backend component for the GNUstep GUI Library.
+ The implementation of the GNUstep GUI Library is designed in two parts.
+ The first part is the front-end component which is independent of platform
+ and display system.  This front-end is combined with a back-end
+ component which handles all of the display system dependent such as
+ specific calls to the X Window System.
+ .
+ This package contains the common files needed by the GNUstep GUI Backend.
+
+Package: gnustep-back-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: gnustep-gpbs (= ${binary:Version}),
+	 gnustep-back`'SOV_BACK-art (= ${binary:Version}) | gnustep-back`'SOV_BACK-cairo (= ${binary:Version}),
+	 ${misc:Depends},
+	 ${gnustep:Depends}
+Recommends: libgnustep-gui0.20-dbg
+Description: GNUstep GUI Backend - debugging symbols
+ It is a backend component for the GNUstep GUI Library.
+ The implementation of the GNUstep GUI Library is designed in two parts.
+ The first part is the front-end component which is independent of platform
+ and display system.  This front-end is combined with a back-end
+ component which handles all of the display system dependent such as
+ specific calls to the X Window System.
+ .
+ This package contains the debugging symbols for the GNUstep GUI Backend.

@@ -1,0 +1,294 @@
+#! /usr/bin/make -f
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+export SHELL=/bin/bash
+include /usr/share/quilt/quilt.make
+
+##################### VERSION NUMBERS ###########################
+
+# GNUstep Gui version :
+v_gui	:= 0.20
+
+# GNUstep Back version :
+sov_back := $(shell . ./Version; echo $$GNUSTEP_BACK_MAJOR_VERSION.$$GNUSTEP_BACK_MINOR_VERSION)
+ifv_back := $(shell . ./Version; echo $$INTERFACE_VERSION_NUMBER)
+
+#################################################################
+
+# These are used for cross-compiling and for saving the configure script
+# from having to guess our platform (since we know it already)
+DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+#DEB_HOST_ARCH		:= $(shell dpkg-architecture -qDEB_HOST_ARCH)
+
+# package names
+p_back		= gnustep-back$(sov_back)
+p_art		= gnustep-back$(sov_back)-art
+p_cairo		= gnustep-back$(sov_back)-cairo
+p_common	= gnustep-back-common
+p_gpbs		= gnustep-gpbs
+
+# package temp dirs
+d_back		= $(CURDIR)/debian/$(p_back)
+d_art		= $(CURDIR)/debian/$(p_art)
+d_cairo		= $(CURDIR)/debian/$(p_cairo)
+d_common	= $(CURDIR)/debian/$(p_common)
+d_gpbs		= $(CURDIR)/debian/$(p_gpbs)
+
+# build dirs
+b_art		= build-art
+b_cairo		= build-cairo
+
+#------------------------------------------------------------------------------
+# GNUstep SETTINGS
+
+# Dirs
+include /usr/share/GNUstep/debian/config.mk
+
+export GNUSTEP_MAKEFILES := /usr/share/GNUstep/Makefiles
+export GNUSTEP_INSTALLATION_DOMAIN := SYSTEM
+
+LDFLAGS := -Wl,-z,defs -Wl,--as-needed
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+optim := debug=yes
+endif
+
+#------------------------------------------------------------------------------
+
+debian/control: debian/control.m4
+	m4 \
+	    -DV_MAKE='$(v_make)' \
+	    -DV_BASE='$(v_base)' \
+	    -DV_GUI='$(v_gui)' \
+	    -DSOV_BACK='$(sov_back)' \
+		debian/control.m4 > debian/control
+
+config: debian/configure-doc-stamp debian/configure-art-stamp debian/configure-cairo-stamp
+clean_files += debian/configure-doc-stamp debian/configure-art-stamp debian/configure-cairo-stamp
+debian/configure-doc-stamp: debian/configure-art-stamp
+	@: # dummy configure, to make back.make, etc., for building docs
+	dh_testdir
+	./configure \
+	  --build=$(DEB_BUILD_GNU_TYPE) \
+	  --host=$(DEB_HOST_GNU_TYPE) \
+	  --target=$(DEB_HOST_GNU_TYPE) \
+	  --with-x \
+	  --enable-graphics=art
+
+	touch $@
+
+debian/configure-art-stamp: configure
+	dh_testdir
+	mkdir $(b_art)
+	cp Source -r $(b_art)/Source
+	cp Tools -r $(b_art)/Tools
+	ln -s ../Headers ../Version ../back.make.in ../configure $(b_art)
+	cd $(b_art) && ln -s ../GNUmakefile* .
+	cd $(b_art) && ../configure \
+	  --build=$(DEB_BUILD_GNU_TYPE) \
+	  --host=$(DEB_HOST_GNU_TYPE) \
+	  --target=$(DEB_HOST_GNU_TYPE) \
+	  --with-x \
+	  --enable-graphics=art \
+	  --with-name=art
+
+	touch $@
+
+debian/configure-cairo-stamp: configure
+	dh_testdir
+	mkdir $(b_cairo)
+	cp Source -r $(b_cairo)/Source
+	ln -s ../Headers ../Version ../configure $(b_cairo)
+	cd $(b_cairo) && ../configure \
+	  --build=$(DEB_BUILD_GNU_TYPE) \
+	  --host=$(DEB_HOST_GNU_TYPE) \
+	  --target=$(DEB_HOST_GNU_TYPE) \
+	  --with-x \
+	  --enable-graphics=cairo \
+	  --with-name=cairo
+
+	touch $@
+
+build: patch build-indep build-arch
+
+build-indep: debian/build-indep-stamp
+clean_files += debian/build-indep-stamp
+debian/build-indep-stamp: config
+	$(MAKE) -C Documentation messages=yes
+
+	touch $@
+
+build-arch: debian/build-art-stamp debian/build-cairo-stamp
+clean_files += debian/build-art-stamp debian/build-cairo-stamp
+debian/build-art-stamp: debian/configure-art-stamp
+	dh_testdir
+	cd $(b_art) && $(MAKE) messages=yes fonts=no $(optim) \
+	  LDFLAGS="$(LDFLAGS)"
+	touch $@
+
+debian/build-cairo-stamp: debian/configure-cairo-stamp
+	dh_testdir
+	cd $(b_cairo)/Source && $(MAKE) messages=yes fonts=no $(optim) \
+	  LDFLAGS="$(LDFLAGS)"
+	touch $@
+
+install: install-indep install-arch
+
+install-indep: build-indep
+	$(MAKE) -C Documentation install DESTDIR=$(d_common)
+
+	dh_link -p$(p_common) \
+	  $(GNUSTEP_SYSTEM_DOC)/Developer usr/share/doc/$(p_common)/Developer
+
+install-arch: build-arch pre-install install-art install-cairo
+
+pre-install:
+	dh_prep
+
+install-art: debian/build-art-stamp
+	dh_testdir
+	dh_testroot
+	dh_installdirs
+
+	cd $(b_art) && $(MAKE) install fonts=no DESTDIR=$(d_art)
+
+	: # Allow it to be used as a default backend
+	dh_link -p$(p_art) \
+	  $(GNUSTEP_SYSTEM_LIBRARY)/Bundles/libgnustep-art-$(ifv_back).bundle/libgnustep-art-$(ifv_back) \
+	  $(GNUSTEP_SYSTEM_LIBRARY)/Bundles/libgnustep-art-$(ifv_back).bundle/libgnustep-back-$(ifv_back)
+
+	: # Move gpbs to gpbs package
+	dh_installdirs -p$(p_gpbs) $(GNUSTEP_SYSTEM_TOOLS)
+	mv $(d_art)/$(GNUSTEP_SYSTEM_TOOLS)/gpbs $(d_gpbs)/$(GNUSTEP_SYSTEM_TOOLS)
+	rm -rf $(d_art)/$(GNUSTEP_SYSTEM_DOC_MAN) $(d_art)/usr/bin
+
+install-cairo: debian/build-cairo-stamp
+	dh_testdir
+	dh_testroot
+	dh_installdirs
+
+	cd $(b_cairo)/Source && $(MAKE) install fonts=no DESTDIR=$(d_cairo)
+
+	: # Allow it to be used as a default backend
+	dh_link -p$(p_cairo) \
+	  $(GNUSTEP_SYSTEM_LIBRARY)/Bundles/libgnustep-cairo-$(ifv_back).bundle/libgnustep-cairo-$(ifv_back) \
+	  $(GNUSTEP_SYSTEM_LIBRARY)/Bundles/libgnustep-cairo-$(ifv_back).bundle/libgnustep-back-$(ifv_back)
+
+# Build architecture-independent files here.
+binary-indep: debian/control build-indep install-indep
+	dh_testdir -i
+	dh_testroot -i
+	dh_installchangelogs -i ChangeLog
+	dh_installdocs -i Documentation/{ANNOUNCE,NEWS,README}
+	gsdh_gnustep -i
+	dh_link -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
+
+# Build architecture-dependent files here.
+clean_files += debian/gnustep-back$(sov_back)-*.postinst debian/gnustep-back$(sov_back)-*.prerm
+binary-arch: debian/control build-arch install-arch
+	dh_testdir -a
+	dh_testroot -a
+	dh_installchangelogs -a ChangeLog
+	dh_installdocs -a Documentation/{ANNOUNCE,NEWS,README}
+	gsdh_gnustep -a
+	dh_installman -p$(p_gpbs) Tools/gpbs.1
+	dh_link -a
+	dh_strip -a --dbg-package=gnustep-back-dbg
+
+	sed -e 's:@GNUSTEP_LIBRARY@:$(GNUSTEP_SYSTEM_LIBRARY):g' \
+	    -e 's:@IFVER@:$(ifv_back):g' \
+	    -e 's:@BACKEND@:art:g' \
+	    -e 's:@PRIORITY@:10:g' \
+	    debian/gnustep-back.postinst.in > debian/gnustep-back$(sov_back)-art.postinst
+
+	sed -e 's:@GNUSTEP_LIBRARY@:$(GNUSTEP_SYSTEM_LIBRARY):g' \
+	    -e 's:@IFVER@:$(ifv_back):g' \
+	    -e 's:@BACKEND@:art:g' \
+	    -e 's:@PRIORITY@:10:g' \
+	    debian/gnustep-back.prerm.in > debian/gnustep-back$(sov_back)-art.prerm
+
+	sed -e 's:@GNUSTEP_LIBRARY@:$(GNUSTEP_SYSTEM_LIBRARY):g' \
+	    -e 's:@IFVER@:$(ifv_back):g' \
+	    -e 's:@BACKEND@:cairo:g' \
+	    -e 's:@PRIORITY@:5:g' \
+	    debian/gnustep-back.postinst.in > debian/gnustep-back$(sov_back)-cairo.postinst
+
+	sed -e 's:@GNUSTEP_LIBRARY@:$(GNUSTEP_SYSTEM_LIBRARY):g' \
+	    -e 's:@IFVER@:$(ifv_back):g' \
+	    -e 's:@BACKEND@:cairo:g' \
+	    -e 's:@PRIORITY@:5:g' \
+	    debian/gnustep-back.prerm.in > debian/gnustep-back$(sov_back)-cairo.prerm
+
+	dh_compress -a
+	dh_fixperms -a
+	dh_makeshlibs -a -V
+	dh_installdeb -a
+
+	@: # override shlibs deps for gnustep-gui to avoid circular dependencies
+	echo "libgnustep-gui $(sov_back) libgnustep-gui$(sov_back) (>= $(v_gui)), gnustep-gui-runtime (>= $(v_gui))" > debian/shlibs.local
+	dh_shlibdeps -a \
+		-l$(d_back)/$(GNUSTEP_SYSTEM_LIBRARIES)
+	rm debian/shlibs.local
+
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
+
+
+# Test that debian/control is up to date
+clean_files += debian/control.tmp
+test-control:
+	m4 \
+	    -DV_MAKE='$(v_make)' \
+	    -DV_BASE='$(v_base)' \
+	    -DV_GUI='$(v_gui)' \
+	    -DSOV_BACK='$(sov_back)' \
+	    -DWITH_DEBUG \
+		debian/control.m4 > debian/control.tmp
+	diff debian/control debian/control.tmp
+
+clean: clean-patched unpatch
+
+clean-patched: test-control
+	dh_testdir
+	dh_testroot
+
+#       if config.make does not exist, then we assume that we don't need to
+#       make clean
+	if [ -e config.make ]; then \
+	  $(MAKE) -C Documentation clean; \
+	  $(MAKE) -C Documentation distclean; \
+	fi
+
+	rm -f Documentation/version.texi
+	rm -rf Source/*.bundle
+	-find -name obj | xargs rm -f
+	rm -f gnustep-xlib gnustep-back
+	rm -f Tools/xdnd.c Tools/XGCommonFont.m
+	rm -f config.h
+	rm -f config.log config.status
+
+#	rm -f Source/libgnustep-back-010Info.plist
+
+	rm -f $(clean_files)
+
+	rm -rf $(b_art) $(b_cairo)
+
+	dh_clean back.make config.make
+
+upstream: build
+	dh_testdir
+	dh_testroot
+	$(MAKE) install fonts=no DESTDIR=$(CURDIR)/debian/upstream
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install upstream config

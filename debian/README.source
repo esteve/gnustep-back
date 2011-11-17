@@ -1,0 +1,4 @@
+This package uses quilt for patch management in a fairly
+straightforward way.
+
+ -- Yavor Doganov <yavor@gnu.org>, Mon, 23 Nov 2009 00:17:51 +0200

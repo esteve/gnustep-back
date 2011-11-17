@@ -1,0 +1,36 @@
+#!/bin/sh
+set -e
+
+FONTSDIR=/var/lib/GNUstep/Fonts
+
+case "$1" in
+    configure)
+	echo -n "Generating GNUstep nfont descriptions..."
+	if [ -d $FONTSDIR ]; then
+	  rm -rf $FONTSDIR/*
+	else
+	  mkdir -p $FONTSDIR
+	fi
+	cd $FONTSDIR; \
+	  mknfonts $(fc-list : file | grep -v '\.gz' | cut -d: -f1) \
+	  2>/var/log/gnustep-back-common.log || (echo " failed."; exit 1)
+	# Remove whitespace in directories.
+	for dir in *\ */; do
+	  mv "$dir" `echo $dir | tr -d [:space:]`
+	done
+	echo " done."
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0

@@ -1,0 +1,16 @@
+2009-12-04  Yavor Doganov  <yavor@gnu.org>
+
+	* configure.ac: Check for cairo-fc and append its libs if it
+        exists.  Fixes FTBFS with cairo/1.9.4 from experimental.
+
+--- gnustep-back.orig/configure.ac
++++ gnustep-back/configure.ac
+@@ -390,6 +390,8 @@
+ PKG_CHECK_MODULES(CAIRO, cairo, have_cairo=yes, have_cairo=no)
+ PKG_CAIRO_FT=no
+ PKG_CHECK_MODULES(CAIRO_FT, cairo-ft, have_cairo_ft=yes, have_cairo_ft=no)
++PKG_CHECK_MODULES([CAIRO_FC], [cairo-fc],
++  [CAIRO_FT_LIBS="$CAIRO_FT_LIBS $CAIRO_FC_LIBS"], [:])
+ PKG_CAIRO_XLIB=no
+ PKG_CHECK_MODULES(CAIRO_XLIB, cairo-xlib, have_cairo_xlib=yes, have_cairo_xlib=no)
+ PKG_CAIRO_WIN32=no

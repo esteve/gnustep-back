@@ -20,7 +20,9 @@ Build-Depends: debhelper (>= 7),
 	       pkg-config,
 	       libcairo2-dev,
 	       texinfo,
-	       quilt
+	       quilt,
+	       clang,
+	       libobjc4-dev
 Homepage: http://gnustep.org
 Vcs-Git: git://git.debian.org/pkg-gnustep/gnustep-back.git
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-gnustep/gnustep-back.git
